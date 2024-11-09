@@ -15,13 +15,13 @@ const App = () => {
     });
   };
 
-  const [joke, setJoke] = useState({ content: `Today is ${getCurrentDate()}`, author: 'Have a nice day' });
+  const [quotes, setQuotes] = useState({ content: `Today is ${getCurrentDate()}`, author: 'Have a nice day' });
   const [loading, setLoading] = useState(false);
 
-  const getJokesData = async () => {
+  const getQuotesData = async () => {
     setLoading(true);
     const newJoke = await getJoke();
-    setJoke(newJoke[0]);
+    setQuotes(newJoke[0]);
     setLoading(false);
   };
 
@@ -32,7 +32,7 @@ const App = () => {
         <div className="card">
           <div className="card-header d-flex align-items-center justify-content-between">
             <h2>Quotes App</h2>
-            <Button fn={getJokesData} />
+            <Button fn={getQuotesData} />
           </div>
           <div className="card-body">
             {loading ? (
@@ -42,7 +42,7 @@ const App = () => {
                 <Spin size="large" />
               </div>
             ) : (
-              <Message joke={joke} />
+              <Message joke={quotes} />
             )}
           </div>
         </div>
