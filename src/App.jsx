@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Button from "./components/Button";
 import Message from "./components/Message";
-import { getJoke } from "./services/api-client";
+import { getQuote } from "./services/api-client";
 import { Spin } from 'antd';
 
 const App = () => {
@@ -20,8 +20,8 @@ const App = () => {
 
   const getQuotesData = async () => {
     setLoading(true);
-    const newJoke = await getJoke();
-    setQuotes(newJoke[0]);
+    const newQuote = await getQuote();
+    setQuotes(newQuote[0]);
     setLoading(false);
   };
 
@@ -42,7 +42,7 @@ const App = () => {
                 <Spin size="large" />
               </div>
             ) : (
-              <Message joke={quotes} />
+              <Message quotes={quotes} />
             )}
           </div>
         </div>
