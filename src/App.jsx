@@ -1,35 +1,54 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import Button from "./components/Button";
+import Message from "./components/Message";
+import { getJoke } from "./services/api-client";
+import { Spin } from 'antd';
 
-function App() {
-  const [count, setCount] = useState(0)
+const App = () => {
+
+  const getCurrentDate = () => {
+    const today = new Date();
+    return today.toLocaleDateString("en-GB", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    });
+  };
+
+  const [joke, setJoke] = useState({ content: `Today is ${getCurrentDate()}`, author: 'Have a nice day' });
+  const [loading, setLoading] = useState(false);
+
+  const getJokesData = async () => {
+    setLoading(true);
+    const newJoke = await getJoke();
+    setJoke(newJoke[0]);
+    setLoading(false);
+  };
+
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <div className="container">
+        <div className="card">
+          <div className="card-header d-flex align-items-center justify-content-between">
+            <h2>Quotes App</h2>
+            <Button fn={getJokesData} />
+          </div>
+          <div className="card-body">
+            {loading ? (
+              <div
+                className="d-flex align-items-center justify-content-center"
+              >
+                <Spin size="large" />
+              </div>
+            ) : (
+              <Message joke={joke} />
+            )}
+          </div>
+        </div>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
-  )
-}
+  );
+};
 
-export default App
+export default App;
