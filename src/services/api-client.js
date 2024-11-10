@@ -1,4 +1,4 @@
-const QuotesURL = "http://api.quotable.io/quotes/random"
+const QuotesURL = "https://api.quotable.io/quotes/random"
 
 export async function getQuote() {
    const respone = await fetch(QuotesURL);
