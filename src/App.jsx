@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Button from "./components/Button";
 import Message from "./components/Message";
-import { getQuote } from "./services/api-client";
+import { getEmoji, getQuote } from "./services/api-client";
 import { Spin } from 'antd';
 
 const App = () => {
@@ -17,11 +17,19 @@ const App = () => {
 
   const [quotes, setQuotes] = useState({ content: `Today is ${getCurrentDate()}`, author: 'Have a nice day' });
   const [loading, setLoading] = useState(false);
+  const [emoji, setEmoji] = useState({ character: "😄" });
 
   const getQuotesData = async () => {
     setLoading(true);
     const newQuote = await getQuote();
+    const NewEmojiList = await getEmoji();
+
+    const limitedEmojiList = NewEmojiList.slice(0, 100);
+    const randomIndex = Math.floor(Math.random() * limitedEmojiList.length);
+    const randomEmoji = limitedEmojiList[randomIndex];
+
     setQuotes(newQuote[0]);
+    setEmoji(randomEmoji);
     setLoading(false);
   };
 
@@ -30,9 +38,9 @@ const App = () => {
     <>
       <div className="container">
         <div className="card">
-          <div className="card-header d-flex align-items-center justify-content-between">
+          <div className="card-header">
             <h2>Quotes App</h2>
-            <Button fn={getQuotesData} />
+
           </div>
           <div className="card-body">
             {loading ? (
@@ -42,8 +50,11 @@ const App = () => {
                 <Spin size="large" />
               </div>
             ) : (
-              <Message quotes={quotes} />
+              <Message quotes={quotes} emoji={emoji} />
             )}
+          </div>
+          <div className="card-footer">
+            <Button fn={getQuotesData} />
           </div>
         </div>
       </div>
